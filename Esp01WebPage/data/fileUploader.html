@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir archivos</title>
+</head>
+<body>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" multiple>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+<script>
+    onload = function() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+  
+            const uploadInput = document.querySelector('input[name="files"]');
+            const formData = new FormData();
+            
+            for (let file of uploadInput.files) {
+                formData.append('files', file, file.name);
+            }
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    alert('Files uploaded successfully!');
+                    uploadInput.value = ''; 
+                } else {
+                    alert('Failed to upload files.');
+                }
+            } catch (error) {
+                console.error('Error uploading files:', error);
+                alert('An error occurred while uploading files.');
+            }
+        });
+    };
+</script>
+</html>
