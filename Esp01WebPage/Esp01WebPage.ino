@@ -77,7 +77,7 @@ void setup() {
       if (dir.fileName() != "fileUploader.html") {
         Serial.print("archivo " + dir.fileName());
         bool removed = LittleFS.remove(dir.fileName());
-        Serial.print(removed ? "Eliminado exitosamente" : "Error al eliminar");
+        Serial.print(removed ? " Eliminado exitosamente " : " Error al eliminar ");
       }
     }
     request->send(200, "text/plain", "Archivos eliminados exitosamente, solo queda fileUploader.html");
