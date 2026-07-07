@@ -27,6 +27,19 @@ h1 {
     background-image: repeating-linear-gradient(to right, white, white 15px, transparent 15px, transparent 20px);
 }
 
+label {
+    color: white;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+input[type="range"] {
+    color: green;
+    width: 100%;
+    height: 5px;
+    outline: none;
+}
+
 button {
     background-color: transparent;
     font-size: 12px;
@@ -63,8 +76,6 @@ svg {
 }
 
 @media (max-width: 600px) {
-
-
     .controls {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
