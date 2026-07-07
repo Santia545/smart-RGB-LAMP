@@ -11,6 +11,7 @@ body {
     background-color: #ff2f2f;
     padding: 20px;
     flex-direction: column;
+    gap: 10px
 }
 
 h1 {
@@ -20,34 +21,71 @@ h1 {
 }
 
 .led-stripe {
-    height: 50px;
+    height: 20px;
     background-color: transparent;
-    opacity: 0.8;
-    background-image: linear-gradient(to right, transparent 5px, transparent 5px, blue 5px, blue 5px);
-    background-size: 10px 100%;
-    backdrop-filter: blur(10px);
+    filter: blur(0.9px);
+    background-image: repeating-linear-gradient(to right, white, white 15px, transparent 15px, transparent 20px);
 }
 
 button {
     background-color: transparent;
+    font-size: 12px;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 10px;
     cursor: pointer;
     border-radius: 10px;
     border-color: white;
     border-width: 1.5px;
     border-style: solid;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 3px;
 }
 
 .controls {
     background-color: orange;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 5px;
+    justify-content: space-between
+}
+
+
+svg {
+    flex-shrink: 0;
+    height: 20px !important;
+    width: 20px !important;
+}
+
+@media (max-width: 600px) {
+
+
+    .controls {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    svg {
+        flex-shrink: 0;
+        height: 15px !important;
+        width: 15px !important;
+    }
+
+    button {
+        flex-direction: column;
+        height: 100%;
+        max-height: 80px;
+    }
 }
 
 .panel {
-    background-color: orange;
+    background-color: pink;
+    border: 1px solid white;
     display: flex;
     justify-content: space-between;
+    border-radius: 5px;
 }

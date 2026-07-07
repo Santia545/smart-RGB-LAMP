@@ -36,10 +36,16 @@ void setup() {
   server.serveStatic("/", LittleFS, "/")
     .setDefaultFile("index.html");
 
-  server.on("/message", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(200, "text/plain", lampStatus);
+  server.on("/lampStatus", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "application/json", lampStatus);
     lampStatus = "";
   });
+
+  server.on(
+    "/changeLampStatus", HTTP_POST, [](AsyncWebServerRequest *request) {
+      request->send(200, "application/json", lampStatus);
+      lampStatus = "";
+    });
 
   server.on(
     "/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
@@ -97,7 +103,10 @@ void setup() {
 void loop() {
 
   if (Serial.available()) {
-    lampStatus = Serial.readStringUntil('\n');
+    String aux = Serial.readStringUntil('\n');
+    if (aux.startsWith("json")) {
+      lampStatus = aux.replace("json", "");
+    }
     lampStatus.trim();
   }
 }
