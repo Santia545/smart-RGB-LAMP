@@ -115,7 +115,7 @@ function onColorChange(event) {
     updateColorUI(value);
 }
 
-//TODO, only update ESP when input ends (user drops slider). use onchange instead of oninput??????????????
+//TODO, only update ESP when input ends (user drops slider). use onchange instead of oninput?????????????? to prevent flooding esp with requests
 function onRedChange(event) {
     const value = parseInt(event.target.value);
     const hexValue = rgbToHex(value, lampStatus.green, lampStatus.blue);
@@ -135,6 +135,7 @@ function onBlueChange(event) {
     document.querySelector("input[type='color']").value = hexValue;
     updateColorUI(hexValue);
 }
+
 function onHexInputChange(event) {
     const value = event.target.value;
     const hexRegex = /^#[0-9A-Fa-f]{6}$/
@@ -153,7 +154,15 @@ function sendDataToEsp() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(lampStatus)
-    }).then(() => console.log("Datos enviados correctamente")).catch(() => alert("Error enviando datos"));
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        console.log("Datos enviados correctamente");
+    }).catch(err => {
+        console.error(err);
+        //alert("Error enviando datos");
+    });
 }
 
 /*
@@ -161,7 +170,7 @@ setInterval(async () => {
     const response = await fetch("/lampStatus");
     const body = await response.text();
     if (body.length > 0) {
-        { red, green, blue, brightness, effects }=JSON.parse(body);
+        { on, red, green, blue, brightness, effects }=JSON.parse(body);
         alert(JSON.stringify(JSON.parse(body)));
     }
 }, 1000);*/
