@@ -74,6 +74,26 @@ function loadImage(event) {
     img.src = URL.createObjectURL(event.target.files[0]);
 }
 
+function onBrightnessChange(event) {
+    const value = event.target.value;
+    lampStatus.setBrightness(value);
+    document.getElementsByClassName("led-stripe")[0].style.opacity = value / 255;
+}
+
+function onRGBButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    document.getElementsByClassName("rgb-tab")[0].style.display = "flex";
+}
+function onImgButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    document.getElementsByClassName("image-tab")[0].style.display = "flex";
+}
 function updateColorUI(value) {
     const colorPicker = document.getElementById("colorValue");
     colorPicker.value = value;
@@ -124,12 +144,6 @@ function onHexInputChange(event) {
         colorInput.value = value;
         colorInput.dispatchEvent(new Event('change'));
     }
-}
-
-function onBrightnessChange(event) {
-    const value = event.target.value;
-    lampStatus.setBrightness(Math.floor(value * 2.55));
-    document.getElementsByClassName("led-stripe")[0].style.opacity = value / 100;
 }
 
 function sendDataToEsp() {
