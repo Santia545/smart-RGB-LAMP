@@ -43,8 +43,8 @@ void setup() {
 
   server.on(
     "/changeLampStatus", HTTP_POST, [](AsyncWebServerRequest *request) {
+      //TODO: HERE UPDATE ARDUINO LAMP.
       request->send(200, "application/json", lampStatus);
-      lampStatus = "";
     });
 
   server.on(
@@ -101,7 +101,6 @@ void setup() {
 
 
 void loop() {
-
   if (Serial.available()) {
     String aux = Serial.readStringUntil('\n');
     if (aux.startsWith("json")) {

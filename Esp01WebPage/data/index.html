@@ -28,7 +28,8 @@
         </div>
         <div class="brightness">
             <label for="brightness-slider">Brillo:</label>
-            <input type="range" min="0" max="100" value="100" id="brightness-slider">
+            <input type="range" min="0" max="100" value="100" id="brightness-slider"
+                onInput="onBrightnessChange(event)">
         </div>
         <div class="controls">
             <button id="color-Picker">
@@ -110,15 +111,16 @@
                     </datalist>
                     <div>
                         <label id="redLabel" for="redSlider">Rojo:</label>
-                        <input type="range" id="redSlider" min="0" max="255" value="255">
+                        <input type="range" id="redSlider" min="0" max="255" value="255" oninput="onRedChange(event)">
                         <label id="greenLabel" for="greenSlider">Verde:</label>
-                        <input type="range" id="greenSlider" min="0" max="255" value="255">
-                        <label id="blueLabel" for="blueSlider">Azul:</label>
-                        <input type="range" id="blueSlider" min="0" max="255" value="255">
+                        <input type="range" id="greenSlider" min="0" max="255" value="255"
+                            oninput="onGreenChange(event)">
+                        <label id=" blueLabel" for="blueSlider">Azul:</label>
+                        <input type="range" id="blueSlider" min="0" max="255" value="255" oninput="onBlueChange(event)">
                     </div>
                 </div>
                 <div>
-                    <label for="colorInput">Ingresa un color por su valor HEX:</label>
+                    <label for=" colorInput">Ingresa un color por su valor HEX:</label>
                     <input type="text" id="colorValue" value="#ffffff">
                 </div>
             </div>

@@ -135,8 +135,7 @@ svg {
 }
 
 .rgb-tab {
-    /*display: flex;*/
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: start;
     gap: 10px;
@@ -179,7 +178,7 @@ input[type="text"] {
 }
 
 .image-tab {
-    display: flex;
+    display: none;
     flex-direction: column;
 }
 
@@ -192,6 +191,7 @@ input[type="file"] {
     background-color: var(--main-bg-color);
     color: var(--main-text-color);
 }
+
 canvas {
     max-width: 100%;
     height: auto;

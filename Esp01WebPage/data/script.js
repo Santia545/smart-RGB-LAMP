@@ -1,3 +1,49 @@
+const lampStatus = {
+    on: true,
+    red: 255,
+    green: 255,
+    blue: 255,
+    brightness: 255,
+    effects: {
+        breathe: true,
+        pulse: false,
+        rainbow: true,
+        audio: true,
+    },
+    setOnState: function (on) {
+        this.on = on;
+        sendDataToEsp();
+    },
+    setRed: function (r) {
+        this.red = r;
+        sendDataToEsp();
+    },
+    setGreen: function (g) {
+        this.green = g;
+        sendDataToEsp();
+    },
+    setBlue: function (b) {
+        this.blue = b;
+        sendDataToEsp();
+    },
+    setColor: function (r, g, b) {
+        this.red = r;
+        this.green = g;
+        this.blue = b;
+        sendDataToEsp();
+    },
+    setBrightness: function (brightness) {
+        this.brightness = brightness;
+        sendDataToEsp();
+    },
+    setEffect: function (effect, value) {
+        if (this.effects.hasOwnProperty(effect)) {
+            this.effects[effect] = value;
+        }
+        sendDataToEsp();
+    }
+};
+
 const rgbToHex = (r, g, b) =>
     "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
 
@@ -28,7 +74,64 @@ function loadImage(event) {
     img.src = URL.createObjectURL(event.target.files[0]);
 }
 
+function updateColorUI(value) {
+    const colorPicker = document.getElementById("colorValue");
+    colorPicker.value = value;
+    document.getElementsByClassName("led-stripe")[0].style.backgroundImage = `repeating-linear-gradient(to right, ${value}, ${value} 15px, transparent 15px, transparent 20px)`;
+    const r = parseInt(value.substring(1, 3), 16);
+    const g = parseInt(value.substring(3, 5), 16);
+    const b = parseInt(value.substring(5, 7), 16);
+    lampStatus.setColor(r, g, b);
+}
+
 function onColorChange(event) {
     const value = event.target.value;
-    document.getElementById("colorValue").value = value;
+    updateColorUI(value);
 }
+
+//TODO, only update ESP when input ends (user drops slider). use onchange instead of oninput??????????????
+function onRedChange(event) {
+    const value = parseInt(event.target.value);
+    const hexValue = rgbToHex(value, lampStatus.green, lampStatus.blue);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue);
+}
+function onGreenChange(event) {
+    const value = parseInt(event.target.value);
+    const hexValue = rgbToHex(lampStatus.red, value, lampStatus.blue);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue);
+}
+
+function onBlueChange(event) {
+    const value = parseInt(event.target.value);
+    const hexValue = rgbToHex(lampStatus.red, lampStatus.green, value);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue);
+}
+
+function onBrightnessChange(event) {
+    const value = event.target.value;
+    lampStatus.setBrightness(Math.floor(value * 2.55));
+    document.getElementsByClassName("led-stripe")[0].style.opacity = value / 100;
+}
+
+function sendDataToEsp() {
+    fetch('/changeLampStatus', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(lampStatus)
+    }).then(() => console.log("Datos enviados correctamente")).catch(() => alert("Error enviando datos"));
+}
+
+/*
+setInterval(async () => {
+    const response = await fetch("/lampStatus");
+    const body = await response.text();
+    if (body.length > 0) {
+        { red, green, blue, brightness, effects }=JSON.parse(body);
+        alert(JSON.stringify(JSON.parse(body)));
+    }
+}, 1000);*/
