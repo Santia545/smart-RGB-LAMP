@@ -86,6 +86,12 @@ function updateColorUI(value) {
 
 function onColorChange(event) {
     const value = event.target.value;
+    const r = parseInt(value.substring(1, 3), 16);
+    const g = parseInt(value.substring(3, 5), 16);
+    const b = parseInt(value.substring(5, 7), 16);
+    document.getElementById('redSlider').value = r;
+    document.getElementById('greenSlider').value = g;
+    document.getElementById('blueSlider').value = b;
     updateColorUI(value);
 }
 
@@ -108,6 +114,16 @@ function onBlueChange(event) {
     const hexValue = rgbToHex(lampStatus.red, lampStatus.green, value);
     document.querySelector("input[type='color']").value = hexValue;
     updateColorUI(hexValue);
+}
+function onHexInputChange(event) {
+    const value = event.target.value;
+    const hexRegex = /^#[0-9A-Fa-f]{6}$/
+    if (hexRegex.test(value)) {
+        updateColorUI(value);
+        const colorInput = document.querySelector("input[type='color']");
+        colorInput.value = value;
+        colorInput.dispatchEvent(new Event('change'));
+    }
 }
 
 function onBrightnessChange(event) {
