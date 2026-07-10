@@ -5,9 +5,9 @@ const lampStatus = {
     blue: 255,
     brightness: 255,
     effects: {
-        breathe: true,
+        breathe: false,
         pulse: false,
-        rainbow: true,
+        rainbow: false,
         audio: true,
     },
     setOnState: function (on) {
@@ -39,6 +39,22 @@ const lampStatus = {
     setEffect: function (effect, value) {
         if (this.effects.hasOwnProperty(effect)) {
             this.effects[effect] = value;
+            switch (effect) {
+                case "breathe":
+                    this.effects.audio = false;
+                    this.effects.pulse = false;
+                    break;
+                case "audio":
+                    this.effects.breathe = false;
+                    this.effects.pulse = false;
+                    break;
+                case "pulse":
+                    this.effects.breathe = false;
+                    this.effects.audio = false;
+                    break;
+                default:
+                    break;
+            }
         }
         sendDataToEsp();
     }
@@ -53,10 +69,18 @@ function onBrightnessChange(event) {
     document.getElementsByClassName("led-stripe")[0].style.opacity = value / 255;
 }
 
+function onPowerButtonClick(event) {
+    const classList = event.target.classList;
+    event.target.children[1].innerText = classList.toggle('active') ? "APAGAR" : "ENCENDER";
+}
+
 function onRGBButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Selecciona un color para la lampara RGB"
+        }
     };
     document.getElementsByClassName("rgb-tab")[0].style.display = "flex";
 }
@@ -116,8 +140,12 @@ function onHexInputChange(event) {
 
 function onImgButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Sube una imagen y despues selecciona el color deseado de dicha imagen"
+        }
+
     };
     document.getElementsByClassName("image-tab")[0].style.display = "flex";
 }
@@ -152,12 +180,49 @@ function loadImage(event) {
             colorInput.dispatchEvent(new Event('change'));
             document.getElementsByClassName("image-tab")[0].style.display = "none";
             document.getElementsByClassName("rgb-tab")[0].style.display = "flex";
+            document.getElementById("title").innerText = "Selecciona un color para la lampara RGB";
         });
     };
     img.src = URL.createObjectURL(event.target.files[0]);
 }
 
+function onRainbowButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    lampStatus.setEffect('rainbow', event.target.classList.toggle('active'));
+}
 
+function onBreatheButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    lampStatus.setEffect('breathe', event.target.classList.toggle('active'));
+    document.getElementById("audio").classList.remove('active');
+    document.getElementById("pulse").classList.remove('active');
+}
+
+function onAudioButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    lampStatus.setEffect('audio', event.target.classList.toggle('active'));
+    document.getElementById("breathe").classList.remove('active');
+    document.getElementById("pulse").classList.remove('active');
+}
+
+function onPulseButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    lampStatus.setEffect('pulse', event.target.classList.toggle('active'));
+    document.getElementById("audio").classList.remove('active');
+    document.getElementById("breathe").classList.remove('active');
+}
 
 function sendDataToEsp() {
     fetch('/changeLampStatus', {

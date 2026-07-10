@@ -74,7 +74,13 @@ button:hover {
 }
 
 button:active {
+    background-color: rgb(87, 174, 255);
+    transition: background-color 0.1s ease;
+}
 
+button.active {
+    box-sizing: border-box;
+    font-weight: 600;
     background-color: rgb(87, 174, 255);
     transition: background-color 0.1s ease;
 }
@@ -91,6 +97,7 @@ svg {
     flex-shrink: 0;
     height: 20px !important;
     width: 20px !important;
+    pointer-events: none;
 }
 
 @media (max-width: 600px) {
