@@ -104,7 +104,7 @@ void loop() {
   if (Serial.available()) {
     String aux = Serial.readStringUntil('\n');
     if (aux.startsWith("json")) {
-      lampStatus = aux.replace("json", "");
+      aux.replace("json", "");
     }
     lampStatus.trim();
   }
