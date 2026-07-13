@@ -1,9 +1,7 @@
 #include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include "arduino_secrets.h"
-
 
 AsyncWebServer server(80);
 
@@ -26,7 +24,6 @@ void setup() {
   Serial.println();
   Serial.print("Connected! IP: ");
   Serial.println(WiFi.localIP());
-  Serial.println(ESP.getFlashChipRealSize());
 
   if (!LittleFS.begin()) {
     Serial.println("LittleFS Mount Failed");
@@ -43,9 +40,17 @@ void setup() {
 
   server.on(
     "/changeLampStatus", HTTP_POST, [](AsyncWebServerRequest *request) {
-      //TODO: HERE UPDATE ARDUINO LAMP.
+      Serial.println(lampStatus);
       request->send(200, "application/json", lampStatus);
-    });
+    },nullptr,
+    [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+      if(index==0){
+        String aux="";
+        aux.reserve(total);
+        aux.concat((const char*)data, len);
+        lampStatus=aux;
+      }
+  });
 
   server.on(
     "/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
@@ -77,6 +82,7 @@ void setup() {
         }
       }
     });
+
   server.on("/deleteAllFiles", HTTP_DELETE, [](AsyncWebServerRequest *request) {
     Dir dir = LittleFS.openDir("/");
     while (dir.next()) {
@@ -88,6 +94,7 @@ void setup() {
     }
     request->send(200, "text/plain", "Archivos eliminados exitosamente, solo queda fileUploader.html");
   });
+
   server.on("/listAllFiles", HTTP_GET, [](AsyncWebServerRequest *request) {
     Dir dir = LittleFS.openDir("/");
     String files = "";
@@ -98,7 +105,6 @@ void setup() {
   });
   server.begin();
 }
-
 
 void loop() {
   if (Serial.available()) {
