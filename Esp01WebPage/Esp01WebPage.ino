@@ -2,28 +2,14 @@
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include "arduino_secrets.h"
+#include <WiFiSettings.h>
 
 AsyncWebServer server(80);
 
 String lampStatus = "";
 
 void setup() {
-
   Serial.begin(74880);
-
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(SSID, PASSWORD);
-
-  Serial.print("Connecting");
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.println();
-  Serial.print("Connected! IP: ");
-  Serial.println(WiFi.localIP());
 
   if (!LittleFS.begin()) {
     Serial.println("LittleFS Mount Failed");
@@ -103,7 +89,10 @@ void setup() {
     }
     request->send(200, "text/plain", files);
   });
+
   server.begin();
+
+  WiFiSettings.connect();
 }
 
 void loop() {
