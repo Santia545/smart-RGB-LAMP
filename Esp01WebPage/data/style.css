@@ -164,13 +164,26 @@ svg {
 }
 
 input[type="color"] {
+    -webkit-appearance: none;
     appearance: none;
     background-color: transparent;
     border: none;
     outline: none;
+    margin-top: 10px;
     width: 100px;
     height: 100px;
     cursor: pointer;
+    border-radius: 10%;
+    box-shadow: rgb(255, 255, 255) 0px 0px 10px 0px;
+    padding: 0px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0px;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: none;
 }
 
 input[type="text"] {

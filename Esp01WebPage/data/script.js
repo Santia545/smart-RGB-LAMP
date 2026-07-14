@@ -88,6 +88,7 @@ function onRGBButtonClick(event) {
 function updateColorUI(value) {
     const colorPicker = document.getElementById("colorValue");
     colorPicker.value = value;
+    document.querySelector('input[type="color"').style.boxShadow = `${value} 0px 0px 10px 0px`;
     document.getElementsByClassName("led-stripe")[0].style.backgroundImage = `repeating-linear-gradient(to right, ${value}, ${value} 15px, transparent 15px, transparent 20px)`;
     const r = parseInt(value.substring(1, 3), 16);
     const g = parseInt(value.substring(3, 5), 16);
