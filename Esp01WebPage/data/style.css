@@ -45,7 +45,6 @@ label {
 input[type="range"] {
     width: 100%;
     height: 5px;
-    outline: none;
 }
 
 button {
@@ -153,14 +152,27 @@ svg {
     font-weight: bold;
 }
 
+#redSlider {
+    accent-color: rgb(255, 0, 0);
+    color: #000;
+}
+
 #greenLabel {
     color: rgb(36, 255, 36);
     font-weight: bold;
 }
 
+#greenSlider {
+    accent-color: rgb(36, 255, 36);
+}
+
 #blueLabel {
     color: rgb(6, 160, 255);
     font-weight: bold;
+}
+
+#blueSlider {
+    accent-color: rgb(6, 160, 255);
 }
 
 input[type="color"] {

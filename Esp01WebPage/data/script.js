@@ -72,6 +72,7 @@ function onBrightnessChange(event) {
 function onPowerButtonClick(event) {
     const classList = event.target.classList;
     event.target.children[1].innerText = classList.toggle('active') ? "APAGAR" : "ENCENDER";
+    document.querySelector(".led-stripe").style.visibility = classList.contains("active") ? "visible" : "hidden";
 }
 
 function onRGBButtonClick(event) {
@@ -129,7 +130,10 @@ function onBlueChange(event) {
 }
 
 function onHexInputChange(event) {
+    event.target.value = event.target.value.replace(/[^#a-fA-F0-9]/g, '');
     const value = event.target.value;
+    if (!value.startsWith("#"))
+        event.target.value = "#";
     const hexRegex = /^#[0-9A-Fa-f]{6}$/
     if (hexRegex.test(value)) {
         updateColorUI(value);
