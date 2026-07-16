@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncWebServer.h>
+#include <ESP8266mDNS.h>
 #include <LittleFS.h>
 #include <WiFiSettings.h>
 #include "PortalCustomStyles.h"
@@ -104,6 +105,11 @@ void setup() {
     }
     request->send(200, "text/plain", files);
   });
+  if (MDNS.begin("esp8266-" + String(ESP.getChipId(), HEX))) {
+    Serial.println("mDNS responder started on esp8266-" + String(ESP.getChipId(), HEX));
+  } else {
+    Serial.println("Error setting up mDNS");
+  }
   //WiFiSettings.hostname="lamparargb";
   WiFiSettings.html("script", portalPage, false);
   WiFiSettings.onSuccess = []() {
@@ -116,6 +122,7 @@ void setup() {
 }
 
 void loop() {
+  MDNS.update();
   if (Serial.available()) {
     String aux = Serial.readStringUntil('\n');
     //todo: add code to delete wificonfigs from user reset button
