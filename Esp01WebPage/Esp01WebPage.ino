@@ -1,8 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
-#include "arduino_secrets.h"
 #include <WiFiSettings.h>
+#include "PortalCustomStyles.h"
 
 AsyncWebServer server(80);
 
@@ -106,6 +106,10 @@ void setup() {
   });
   WiFiSettings.onSuccess = []() {
     server.begin();
+  };
+  WiFiSettings.html("",portalPage,false);
+  WiFiSettings.onConfigSaved = []() {
+    ESP.restart();
   };
   WiFiSettings.connect();
 }
