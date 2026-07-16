@@ -88,7 +88,7 @@ function onRGBButtonClick(event) {
     document.getElementsByClassName("rgb-tab")[0].style.display = "flex";
 }
 
-function updateColorUI(value) {
+function updateColorUI(value, updateEsp = true) {
     const colorPicker = document.getElementById("colorValue");
     colorPicker.value = value;
     document.querySelector('input[type="color"').style.boxShadow = `${value} 0px 0px 10px 0px`;
@@ -96,7 +96,8 @@ function updateColorUI(value) {
     const r = parseInt(value.substring(1, 3), 16);
     const g = parseInt(value.substring(3, 5), 16);
     const b = parseInt(value.substring(5, 7), 16);
-    lampStatus.setColor(r, g, b);
+    if (updateEsp)
+        lampStatus.setColor(r, g, b);
 }
 
 function onColorChange(event) {
@@ -130,6 +131,27 @@ function onBlueChange(event) {
     document.querySelector("input[type='color']").value = hexValue;
     updateColorUI(hexValue);
 }
+
+function onRedInput(event) {
+    const value = parseInt(event.target.value);
+    const hexValue = rgbToHex(value, lampStatus.green, lampStatus.blue);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue, false);
+}
+function onGreenInput(event) {
+    const value = parseInt(event.target.value);
+    const hexValue = rgbToHex(lampStatus.red, value, lampStatus.blue);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue, false);
+}
+
+function onBlueInput(event) {
+    const value = parseInt(event.target.value);
+    const hexValue = rgbToHex(lampStatus.red, lampStatus.green, value);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue, false);
+}
+
 
 function onHexInputChange(event) {
     event.target.value = event.target.value.replace(/[^#a-fA-F0-9]/g, '');
