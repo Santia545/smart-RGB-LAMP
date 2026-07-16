@@ -16,8 +16,11 @@ void setup() {
     return;
   }
   //TODO: MOUNT ON DIFFERENT FOLDER, AND ALSO ADD DELETE CONFIG FILE ENDPOINT
-  server.serveStatic("/", LittleFS, "/")
+  server.serveStatic("/", LittleFS, "/uploads")
     .setDefaultFile("index.html");
+
+  server.serveStatic("/fileUploader", LittleFS, "/")
+    .setDefaultFile("fileUploader.html");
 
   server.on("/lampStatus", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "application/json", lampStatus);
@@ -28,15 +31,19 @@ void setup() {
     "/changeLampStatus", HTTP_POST, [](AsyncWebServerRequest *request) {
       Serial.println(lampStatus);
       request->send(200, "application/json", lampStatus);
-    },nullptr,
-    [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-      if(index==0){
-        String aux="";
+    },
+    nullptr, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+      String aux = "";
+      if (index == 0) {
         aux.reserve(total);
-        aux.concat((const char*)data, len);
-        lampStatus=aux;
+        aux.concat((const char *)data, len);
+        lampStatus = aux;
+      } else {
+        aux.reserve(total);
+        aux.concat((const char *)data, len);
+        lampStatus += aux;
       }
-  });
+    });
 
   server.on(
     "/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
@@ -46,7 +53,7 @@ void setup() {
       static File uploadFile;
 
       if (index == 0) {
-        String filepath = "/" + filename;
+        String filepath = "/uploads/" + filename;
         Serial.printf("Upload Start: %s\n", filepath.c_str());
         uploadFile = LittleFS.open(filepath, "w");
         if (!uploadFile) {
@@ -70,6 +77,15 @@ void setup() {
     });
 
   server.on("/deleteAllFiles", HTTP_DELETE, [](AsyncWebServerRequest *request) {
+    Dir dir = LittleFS.openDir("/uploads");
+    while (dir.next()) {
+      Serial.print("archivo " + dir.fileName());
+      bool removed = LittleFS.remove("/uploads/" + dir.fileName());
+      Serial.print(removed ? " Eliminado exitosamente " : " Error al eliminar ");
+    }
+    request->send(200, "text/plain", "Archivos eliminados exitosamente");
+  });
+  server.on("/deleteWifiConfig", HTTP_DELETE, [](AsyncWebServerRequest *request) {
     Dir dir = LittleFS.openDir("/");
     while (dir.next()) {
       if (dir.fileName() != "fileUploader.html") {
@@ -78,20 +94,19 @@ void setup() {
         Serial.print(removed ? " Eliminado exitosamente " : " Error al eliminar ");
       }
     }
-    request->send(200, "text/plain", "Archivos eliminados exitosamente, solo queda fileUploader.html");
+    request->send(200, "text/plain", "Archivos de configuracion eliminados exitosamente, solo queda fileUploader.html");
   });
-
   server.on("/listAllFiles", HTTP_GET, [](AsyncWebServerRequest *request) {
-    Dir dir = LittleFS.openDir("/");
+    Dir dir = LittleFS.openDir("/uploads");
     String files = "";
     while (dir.next()) {
       files += dir.fileName() + "\n";
     }
     request->send(200, "text/plain", files);
   });
-
-  server.begin();
-
+  WiFiSettings.onSuccess = []() {
+    server.begin();
+  };
   WiFiSettings.connect();
 }
 
