@@ -71,8 +71,10 @@ function onBrightnessChange(event) {
 
 function onPowerButtonClick(event) {
     const classList = event.target.classList;
-    event.target.children[1].innerText = classList.toggle('active') ? "APAGAR" : "ENCENDER";
-    document.querySelector(".led-stripe").style.visibility = classList.contains("active") ? "visible" : "hidden";
+    const result = classList.toggle('active');
+    event.target.children[1].innerText = result ? "APAGAR" : "ENCENDER";
+    document.querySelector(".led-stripe").style.visibility = result ? "visible" : "hidden";
+    lampStatus.setOnState(result);
 }
 
 function onRGBButtonClick(event) {
