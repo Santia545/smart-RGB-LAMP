@@ -104,10 +104,11 @@ void setup() {
     }
     request->send(200, "text/plain", files);
   });
+  //WiFiSettings.hostname="lamparargb";
+  WiFiSettings.html("script", portalPage, false);
   WiFiSettings.onSuccess = []() {
     server.begin();
   };
-  WiFiSettings.html("",portalPage,false);
   WiFiSettings.onConfigSaved = []() {
     ESP.restart();
   };
@@ -117,6 +118,7 @@ void setup() {
 void loop() {
   if (Serial.available()) {
     String aux = Serial.readStringUntil('\n');
+    //todo: add code to delete wificonfigs from user reset button
     if (aux.startsWith("json")) {
       aux.replace("json", "");
     }
