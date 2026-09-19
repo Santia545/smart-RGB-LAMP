@@ -43,14 +43,27 @@ const lampStatus = {
                 case "breathe":
                     this.effects.audio = false;
                     this.effects.pulse = false;
+                    this.effects.candle = false;
                     break;
                 case "audio":
                     this.effects.breathe = false;
                     this.effects.pulse = false;
+                    this.effects.candle = false;
                     break;
                 case "pulse":
                     this.effects.breathe = false;
                     this.effects.audio = false;
+                    this.effects.candle = false;
+                    break;
+                case "candle":
+                    this.effects.breathe = false;
+                    this.effects.audio = false;
+                    this.effects.pulse = false;
+                    break;
+                case "rainbow":
+                    this.effects.colorSequence = false;
+                case "colorSequence":
+                    this.effects.rainbow = false;
                     break;
                 default:
                     break;
@@ -221,6 +234,7 @@ function onRainbowButtonClick(event) {
             node.style.display = "none";
     };
     lampStatus.setEffect('rainbow', event.target.classList.toggle('active'));
+    document.getElementById("colorSequence").classList.remove('active');
 }
 
 function onBreatheButtonClick(event) {
@@ -231,6 +245,7 @@ function onBreatheButtonClick(event) {
     lampStatus.setEffect('breathe', event.target.classList.toggle('active'));
     document.getElementById("audio").classList.remove('active');
     document.getElementById("pulse").classList.remove('active');
+    document.getElementById("candle").classList.remove('active');
 }
 
 function onAudioButtonClick(event) {
@@ -241,6 +256,7 @@ function onAudioButtonClick(event) {
     lampStatus.setEffect('audio', event.target.classList.toggle('active'));
     document.getElementById("breathe").classList.remove('active');
     document.getElementById("pulse").classList.remove('active');
+    document.getElementById("candle").classList.remove('active');
 }
 
 function onPulseButtonClick(event) {
@@ -251,7 +267,29 @@ function onPulseButtonClick(event) {
     lampStatus.setEffect('pulse', event.target.classList.toggle('active'));
     document.getElementById("audio").classList.remove('active');
     document.getElementById("breathe").classList.remove('active');
+    document.getElementById("candle").classList.remove('active');
 }
+
+function onCandleButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    lampStatus.setEffect('candle', event.target.classList.toggle('active'));
+    document.getElementById("audio").classList.remove('active');
+    document.getElementById("breathe").classList.remove('active');
+    document.getElementById("pulse").classList.remove('active');
+}
+
+function onColorSequenceButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P")
+            node.style.display = "none";
+    };
+    lampStatus.setEffect('colorSequence', event.target.classList.toggle('active'));
+    document.getElementById("rainbow").classList.remove('active');
+}
+
 
 function sendDataToEsp() {
     fetch('/changeLampStatus', {
