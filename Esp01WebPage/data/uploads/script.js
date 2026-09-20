@@ -131,7 +131,6 @@ function onColorChange(event) {
     updateColorUI(value);
 }
 
-//TODO, only update ESP when input ends (user drops slider). use onchange instead of oninput?????????????? to prevent flooding esp with requests
 function onRedChange(event) {
     const value = parseInt(event.target.value);
     const hexValue = rgbToHex(value, lampStatus.green, lampStatus.blue);

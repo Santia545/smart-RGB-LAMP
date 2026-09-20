@@ -16,7 +16,6 @@ void setup() {
     Serial.println("LittleFS Mount Failed");
     return;
   }
-  //TODO: MOUNT ON DIFFERENT FOLDER, AND ALSO ADD DELETE CONFIG FILE ENDPOINT
   server.serveStatic("/", LittleFS, "/uploads")
     .setDefaultFile("index.html");
 
@@ -27,7 +26,6 @@ void setup() {
     request->send(200, "application/json", lampStatus);
     lampStatus = "";
   });
-  //TODO: Body request is splitted
   server.on(
     "/changeLampStatus", HTTP_POST, [](AsyncWebServerRequest *request) {
       Serial.println(lampStatus);
