@@ -6,9 +6,11 @@ const lampStatus = {
     brightness: 255,
     effects: {
         breathe: false,
-        pulse: false,
         rainbow: false,
         audio: true,
+        pulse: false,
+        colorSequence: false,
+        candle: false,
     },
     setOnState: function (on) {
         this.on = on;
@@ -76,10 +78,15 @@ const lampStatus = {
 const rgbToHex = (r, g, b) =>
     "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
 
+
+function onBrightnessInput(event) {
+    const value = event.target.value;
+    document.getElementsByClassName("led-stripe")[0].style.opacity = value / 255;
+}
+
 function onBrightnessChange(event) {
     const value = event.target.value;
     lampStatus.setBrightness(value);
-    document.getElementsByClassName("led-stripe")[0].style.opacity = value / 255;
 }
 
 function onPowerButtonClick(event) {
@@ -261,24 +268,60 @@ function onAudioButtonClick(event) {
 
 function onPulseButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Configura el ritmo del pulso"
+        }
     };
+    document.getElementsByClassName("pulse-tab")[0].style.display = "flex";
     lampStatus.setEffect('pulse', event.target.classList.toggle('active'));
     document.getElementById("audio").classList.remove('active');
     document.getElementById("breathe").classList.remove('active');
     document.getElementById("candle").classList.remove('active');
 }
 
+function onPulseInputChange(event) {
+    const value = event.target.value;
+    if (Number(value) > 300) {
+        event.target.value = 300;
+    }
+}
 function onCandleButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Configura el efecto vela y la temperatura de la luz"
+        }
     };
+    document.getElementsByClassName("candle-tab")[0].style.display = "flex";
     lampStatus.setEffect('candle', event.target.classList.toggle('active'));
     document.getElementById("audio").classList.remove('active');
     document.getElementById("breathe").classList.remove('active');
     document.getElementById("pulse").classList.remove('active');
+}
+
+function onColorTemperatureSwitchChange(event) {
+    const value = event.target.checked;
+    document.getElementById("colorTemperatureSlider").disabled = !value;
+}
+
+function onColorTemperatureChange(event) {
+    const value = parseInt(event.target.value);
+    const rgb = kelvin2rgb(value);
+    const hexValue = rgbToHex(rgb[0], rgb[1], rgb[2]);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue);
+    colorInput.dispatchEvent(new Event('change'));
+
+}
+function onColorTemperatureInput(event) {
+    const value = parseInt(event.target.value);
+    const rgb = kelvin2rgb(value);
+    const hexValue = rgbToHex(rgb[0], rgb[1], rgb[2]);
+    document.querySelector("input[type='color']").value = hexValue;
+    updateColorUI(hexValue, false);
 }
 
 function onColorSequenceButtonClick(event) {
