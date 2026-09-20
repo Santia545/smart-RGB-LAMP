@@ -257,13 +257,22 @@ function onBreatheButtonClick(event) {
 
 function onAudioButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Configura la sensibilidad del micrófono"
+        }
     };
+    document.getElementsByClassName("audio-tab")[0].style.display = "flex";
     lampStatus.setEffect('audio', event.target.classList.toggle('active'));
     document.getElementById("breathe").classList.remove('active');
     document.getElementById("pulse").classList.remove('active');
     document.getElementById("candle").classList.remove('active');
+}
+
+function onClapSwitchChange(event) {
+    const value = event.target.checked;
+    document.getElementById("clapVolumeSlider").disabled = !value;
 }
 
 function onPulseButtonClick(event) {

@@ -30,7 +30,7 @@
         </div>
         <div class="brightness">
             <label for="brightness-slider">Brillo:</label>
-            <input type="range" min="0" max="255" value="255" id="brightness-slider" onInput="onBrightnessInput(event)"
+            <input type="range" min="0" max="255" value="255" id="brightness-slider" oninput="onBrightnessInput(event)"
                 onchange="onBrightnessChange(event)">
         </div>
         <div class="controls">
@@ -175,6 +175,36 @@
                 <canvas id="imageCanvas" style="display: none;"></canvas>
                 </canvas>
             </div>
+            <div class="audio-tab">
+                <div class="switch-container" style="align-self: flex-start;">
+                    <p id="info">Apagar con Aplauso</p>
+                    <label class="switch">
+                        <input type="checkbox" onchange="onClapSwitchChange(event)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div>
+                    <label for="clapVolumeSlider">Calibra el volumen al que se apaga la lampara:</label>
+                    <input type="range" min="30" max="500" step="1" value="265" id="clapVolumeSlider"
+                        onchange="onClapVolumeChange(event)" disabled>
+                </div>
+                <div>
+                    <label for="micGainSlider">Calibra la ganancia del micrófono:</label>
+                    <input type="range" min="1" max="3" step="0.1" value="1" id="micGainSlider"
+                        onInput="((event)=>{output.value = 'x'+event.target.value;})(event)"
+                        onchange="onMicGainChange(event)">
+                    <output id="output" for="myRange">x1</output>
+
+                </div>
+                <div>
+                    <label for="micSensitivitySlider">Calibra la sensibilidad del micrófono:</label>
+                    <input type="range" min="30" max="500" step="1" value="30" id="micSensitivitySlider"
+                        onchange="onMicSensitivityChange(event)">
+                    <!-- TODO: Implement automatic calibration dialog confirmation with instructions -->
+                    <button style="margin: 10px 0px;" id="calibrateButton" onclick="calibrateClapVolume()">Calibrar
+                        Sensibilidad Automaticamente</button>
+                </div>
+            </div>
             <div class="pulse-tab">
                 <div class="switch-container" style="align-self: flex-start;">
                     <p id="info">Pulso suave</p>
@@ -209,7 +239,7 @@
                 <label id="temperatureLabel" for="colorTemperatureSlider">Temperatura de Color, de 1000K( Rojo) a
                     12000K( Azul):</label>
                 <input type="range" min="1000" max="12000" step="100" value="6500" id="colorTemperatureSlider"
-                    onInput="onColorTemperatureInput(event)" onchange="onColorTemperatureChange(event)" disabled>
+                    oninput="onColorTemperatureInput(event)" onchange="onColorTemperatureChange(event)" disabled>
             </div>
         </div>
     </div>

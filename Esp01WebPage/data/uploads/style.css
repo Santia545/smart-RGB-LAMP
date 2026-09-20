@@ -84,6 +84,11 @@ button.active {
     transition: background-color 0.1s ease;
 }
 
+.panel button {
+    flex-direction: column;
+    height: 100%;
+    max-height: 40px;
+}
 .controls {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -260,6 +265,17 @@ canvas {
     cursor: crosshair;
 }
 
+.audio-tab {
+    display: none;
+    flex-direction: column;
+}
+
+output {
+    color: var(--main-text-color);
+    font-size: 14px;
+    text-align: start;
+    margin: 2px;
+}
 .pulse-tab {
     display: none;
     flex-direction: column;
