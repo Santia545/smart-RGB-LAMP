@@ -89,6 +89,7 @@ button.active {
     height: 100%;
     max-height: 40px;
 }
+
 .controls {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -227,6 +228,14 @@ input[type="color"]::-webkit-color-swatch {
     border: none;
 }
 
+input[type="color"].colors-sequence-input {
+    border: none;
+    width: 30px;
+    height: 30px;
+    box-shadow: unset;
+    margin: 0px;
+}
+
 input[type="text"] {
     appearance: none;
     border: solid 1px gray;
@@ -265,6 +274,47 @@ canvas {
     cursor: crosshair;
 }
 
+.rainbow-tab {
+    display: none;
+    flex-direction: column;
+}
+
+.color-sequence-tab {
+    display: none;
+    flex-direction: column;
+}
+
+.drag-area {
+    outline: dashed 1px var(--main-border-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0px;
+}
+
+.color-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.color-container input[type="number"] {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+
+.breathe-tab {
+    display: none;
+    flex-direction: column;
+}
+
 .audio-tab {
     display: none;
     flex-direction: column;
@@ -276,6 +326,7 @@ output {
     text-align: start;
     margin: 2px;
 }
+
 .pulse-tab {
     display: none;
     flex-direction: column;

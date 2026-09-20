@@ -236,18 +236,41 @@ function loadImage(event) {
 
 function onRainbowButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Configura la velocidad del efecto arcoiris"
+        }
     };
+    document.getElementsByClassName("rainbow-tab")[0].style.display = "flex";
     lampStatus.setEffect('rainbow', event.target.classList.toggle('active'));
     document.getElementById("colorSequence").classList.remove('active');
 }
 
+function onColorSequenceButtonClick(event) {
+    for (const node of document.getElementsByClassName('panel')[0].children) {
+        if (node.tagName != "P") {
+            node.style.display = "none";
+        }
+        else {
+            node.innerText = "Secuencia de colores, arrastra para ordenar y configura el tiempo de cada color"
+        }
+    };
+    document.getElementsByClassName("color-sequence-tab")[0].style.display = "flex";
+    lampStatus.setEffect('colorSequence', event.target.classList.toggle('active'));
+    document.getElementById("rainbow").classList.remove('active');
+   
+}
+
 function onBreatheButtonClick(event) {
     for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
+        if (node.tagName != "P") {
             node.style.display = "none";
+        } else {
+            node.innerText = "Configura la velocidad del efecto de respiración"
+        }
     };
+    document.getElementsByClassName("breathe-tab")[0].style.display = "flex";
     lampStatus.setEffect('breathe', event.target.classList.toggle('active'));
     document.getElementById("audio").classList.remove('active');
     document.getElementById("pulse").classList.remove('active');
@@ -321,9 +344,10 @@ function onColorTemperatureChange(event) {
     const hexValue = rgbToHex(rgb[0], rgb[1], rgb[2]);
     document.querySelector("input[type='color']").value = hexValue;
     updateColorUI(hexValue);
+    const colorInput = document.querySelector("input[type='color']");
     colorInput.dispatchEvent(new Event('change'));
-
 }
+
 function onColorTemperatureInput(event) {
     const value = parseInt(event.target.value);
     const rgb = kelvin2rgb(value);
@@ -331,16 +355,6 @@ function onColorTemperatureInput(event) {
     document.querySelector("input[type='color']").value = hexValue;
     updateColorUI(hexValue, false);
 }
-
-function onColorSequenceButtonClick(event) {
-    for (const node of document.getElementsByClassName('panel')[0].children) {
-        if (node.tagName != "P")
-            node.style.display = "none";
-    };
-    lampStatus.setEffect('colorSequence', event.target.classList.toggle('active'));
-    document.getElementById("rainbow").classList.remove('active');
-}
-
 
 function sendDataToEsp() {
     fetch('/changeLampStatus', {
