@@ -105,15 +105,16 @@ void setup() {
     }
     request->send(200, "text/plain", files);
   });
-  if (MDNS.begin("esp8266-" + String(ESP.getChipId(), HEX))) {
-    Serial.println("mDNS responder started on esp8266-" + String(ESP.getChipId(), HEX));
-  } else {
-    Serial.println("Error setting up mDNS");
-  }
+  
   //WiFiSettings.hostname="lamparargb";
   WiFiSettings.html("script", portalPage, false);
   WiFiSettings.onSuccess = []() {
     server.begin();
+    if (MDNS.begin("esp8266-" + String(ESP.getChipId(), HEX))) {
+      Serial.println("mDNS responder started on esp8266-" + String(ESP.getChipId(), HEX));
+    } else {
+      Serial.println("Error setting up mDNS");
+    }
   };
   WiFiSettings.onConfigSaved = []() {
     ESP.restart();
